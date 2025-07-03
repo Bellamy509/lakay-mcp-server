@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { createServer } from "http";
+import { createServer, IncomingMessage, ServerResponse } from "http";
 import { URL } from "url";
 
 // Port pour Railway (utilise la variable d'environnement PORT ou 3000 par défaut)
@@ -99,7 +99,7 @@ function makeRecommendation(_decision: string): string {
 }
 
 function generateCreativeIdeas(topic: string, quantity: number): string {
-  const ideas = [];
+  const ideas: string[] = [];
   for (let i = 1; i <= quantity; i++) {
     ideas.push(`${i}. Idée créative n°${i} pour "${topic}"`);
   }
@@ -327,7 +327,7 @@ const tools = [
 ];
 
 // Serveur HTTP
-const server = createServer(async (req, res) => {
+const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
   // Configuration CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -406,7 +406,7 @@ curl -X POST ${req.headers.host ? `http://${req.headers.host}` : "https://votre-
       const toolName = url.pathname.split("/")[2];
 
       let body = "";
-      req.on("data", (chunk) => {
+      req.on("data", (chunk: Buffer) => {
         body += chunk.toString();
       });
 
